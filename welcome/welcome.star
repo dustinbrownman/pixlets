@@ -13,7 +13,7 @@ def main():
         padding=1,
     )
 
-    output = animate_in_from(
+    output = animate(
         child=wrapper,
         x=0,
         y=32,
@@ -23,20 +23,19 @@ def main():
         child = output
     )
 
-def animate_in_from(child, x=0, y=0):
+def animate(child, x=0, y=0):
     return animation.Transformation(
         child=child,
-        duration = 70,
-        fill_mode="backwards",
+        duration = 500,
         delay = 0,
         keyframes = [
             animation.Keyframe(
                 percentage = 0.0,
                 transforms = [animation.Translate(x, y)],
-                curve = "linear",
+                curve = "ease_out",
             ),
             animation.Keyframe(
-                percentage = 1.0,
+                percentage = 0.15,
                 transforms = [animation.Translate(0, 0)],
             ),
         ],
