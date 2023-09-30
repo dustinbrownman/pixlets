@@ -1,0 +1,28 @@
+{
+  "telemetry": {
+    "temp-bed": 21.6,
+    "temp-nozzle": 21.5,
+    "print-speed": 100,
+    "z-height": 0.0,
+    "material": "PLA"
+  },
+  "temperature": {
+    "tool0": { "actual": 21.5, "target": 0.0, "display": 0.0, "offset": 0 },
+    "bed": { "actual": 21.6, "target": 0.0, "offset": 0 }
+  },
+  "state": {
+    "text": "Operational",
+    "flags": {
+      "operational": true,
+      "paused": false,
+      "printing": false,
+      "cancelling": false,
+      "pausing": false,
+      "sdReady": false,
+      "error": false,
+      "closedOnError": false,
+      "ready": true,
+      "busy": false
+    }
+  }
+}
