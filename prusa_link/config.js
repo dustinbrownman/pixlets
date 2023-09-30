@@ -6,11 +6,11 @@ async function configure(config = []) {
   await prusaLink.init();
 
   return [
-    { key: "printer_status", value: prusaLink.printer.status },
-    { key: "job_name", value: prusaLink.job.name },
-    { key: "progress", value: prusaLink.job.progress },
-    { key: "elapsed", value: prusaLink.job.elapsed },
-    { key: "remaining", value: prusaLink.job.remaining },
+    { key: "printer_status", value: prusaLink.printer.getStatus },
+    { key: "job_name", value: prusaLink.job.getName },
+    { key: "progress", value: prusaLink.job.getProgress },
+    { key: "elapsed", value: prusaLink.job.getElapsed },
+    { key: "remaining", value: prusaLink.job.getRemaining },
   ];
 }
 
@@ -68,56 +68,48 @@ class Printer {
     this.temperature = temperature;
   }
 
-  get status() {
+  get getStatus() {
     return this.state.text;
-  }
-
-  online() {
-    return this.status !== "Offline";
   }
 }
 
 class Job {
   constructor({ job, progress, state }) {
     this.details = job;
-    this.progress = progress || {};
+    this.progress = progress;
     this.state = state;
   }
 
-  printing() {
+  get isPrinting() {
     return this.state === "Printing";
   }
 
-  get name() {
-    if (!this.printing()) {
+  get getName() {
+    if (!this.isPrinting) {
       return "No job";
     }
     return this.details.file.name;
   }
 
-  get elapsed() {
-    if (!this.printing()) {
+  get getElapsed() {
+    if (!this.isPrinting) {
       return "";
     }
     return this.humanizeTime(this.progress.printTime);
   }
 
-  get remaining() {
-    if (!this.printing()) {
+  get getRemaining() {
+    if (!this.isPrinting) {
       return "";
     }
     return this.humanizeTime(this.progress.printTimeLeft);
   }
 
-  get progress() {
-    if (!this.printing()) {
+  get getProgress() {
+    if (!this.isPrinting) {
       return 0;
     }
     return this.progress.completion;
-  }
-
-  set progress(progress) {
-    this.progress = progress;
   }
 
   humanizeTime(seconds) {
