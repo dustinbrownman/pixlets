@@ -109,6 +109,17 @@ class Job {
     return this.humanizeTime(this.progress.printTimeLeft);
   }
 
+  get progress() {
+    if (!this.printing()) {
+      return 0;
+    }
+    return this.progress.completion;
+  }
+
+  set progress(progress) {
+    this.progress = progress;
+  }
+
   humanizeTime(seconds) {
     return new Date(1000 * seconds).toISOString().slice(11, 19);
   }
