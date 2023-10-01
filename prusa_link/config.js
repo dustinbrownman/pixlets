@@ -106,10 +106,7 @@ class Job {
   }
 
   get getProgress() {
-    if (!this.isPrinting) {
-      return 0;
-    }
-    return this.progress.completion;
+    return (this.progress?.completion || 0.0).toString();
   }
 
   humanizeTime(seconds) {
