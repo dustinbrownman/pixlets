@@ -3,6 +3,7 @@ load("animation.star", "animation")
 load("math.star", "math")
 load("time.star", "time")
 load("humanize.star", "humanize")
+load("encoding/base64.star", "base64")
 
 ANIMATION_DURATION = 40
 PROGRESS_BAR_WIDTH = 62
@@ -13,6 +14,12 @@ def main(config):
     progress = float(config.get("progress", "0.0"))
     elapsed = config.get("elapsed", "")
     remaining = config.get("remaining", "")
+
+    if printer_status == "Offline":
+        return offline()
+
+    if printer_status == "Operational":
+        return idle()
 
     if printer_status != "Printing":
         return []
@@ -93,6 +100,40 @@ def main(config):
         child = render.Padding(child=output, pad=1),
     )
 
+def offline():
+    text = render.WrappedText("Offline")
+
+    row = render.Row(
+        children = [
+            mini_gif(),
+            render.Padding(child=text, pad=(1, 0, 1, 0)),
+        ],
+        main_align = "space_between",
+        cross_align = "center",
+        expanded = True,
+    )
+
+    return render.Root(
+        child = render.Padding(child=row, pad=1),
+    )
+
+def idle():
+    text = render.WrappedText("Idle")
+
+    row = render.Row(
+        children = [
+            mini_gif(),
+            render.Padding(child=text, pad=(1, 0, 1, 0)),
+        ],
+        main_align = "space_around",
+        cross_align = "center",
+        expanded = True,
+    )
+
+    return render.Root(
+        child = render.Padding(child=row, pad=1),
+    )
+
 def center(child):
     return render.Row(
         children = [child],
@@ -169,4 +210,7 @@ def animate_text_up(text, y_start, y_end, delay=0, duration=20):
         ]
     )
 
+def mini_gif():
+    src = base64.decode("R0lGODdhGwAYALMAAAAAACIgNEVJJN9xJmeW65utt8vb/P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkUAAgALAAAAAAbABgAAAScEMlJKwIY2M1l1p1VjMH0hRVJeh+IFiWyIgYS3KhdUGt9x6HAjgfz4VBCUcEInAwGlGNlEKBKnQODFnDTUqzVq+RpOmq1v3BzDPWIEdYBd22Zb8gBTM67Ybo6ZBZME29sfTY4P4BtFX4dApBPkgOQApN5FpWVk0+bBARUf5qjpJafoBtpqqsDp4yEq7E3cqCvErKycgC2UbiKkxsRADs=")
 
+    return render.Image(src)
